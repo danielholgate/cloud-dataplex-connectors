@@ -1,30 +1,42 @@
-FROM mcr.microsoft.com/mssql/server:2019-latest
+FROM debian:11-slim
 
-ENV ACCEPT_EULA=Y
-ENV SA_PASSWORD=yourStrong(!)Password
-ENV MSSQL_PID=Developer
+ENV DEBIAN_FRONTEND=noninteractive
 
-RUN apt-get update && apt-get install -y curl gnupg
-RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -
-RUN curl https://packages.microsoft.com/config/debian/11/prod.list > /etc/apt/sources.list.d/mssql-release.list
-RUN apt-get update && apt-get install -y msodbcsql18
-RUN apt-get update && apt-get install -y unixodbc-dev
+RUN apt update && apt install -y procps tini
+RUN apt install -y wget
 
-RUN apt-get update && apt-get install -y wget procps tini
-RUN apt-get install -y python3 python3-pip
+ENV SPARK_EXTRA_JARS_DIR=/opt/spark/jars/
+RUN mkdir -p "${SPARK_EXTRA_JARS_DIR}"
+COPY mssql-jdbc-12.8.1.jre11.jar "${SPARK_EXTRA_JARS_DIR}"
 
-WORKDIR /usr/src/app
+ENV CONDA_HOME=/opt/miniconda3
+ENV PYSPARK_PYTHON=${CONDA_HOME}/bin/python
+ENV PATH=${CONDA_HOME}/bin:${PATH}
+RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
 
-COPY requirements.txt ./
+RUN bash Miniconda3-py310_23.3.1-0-Linux-x86_64.sh -b -p /opt/miniconda3 \
+  && ${CONDA_HOME}/bin/conda config --system --set always_yes True \
+  && ${CONDA_HOME}/bin/conda config --system --set auto_update_conda False \
+  && ${CONDA_HOME}/bin/conda config --system --prepend channels conda-forge \
+  && ${CONDA_HOME}/bin/conda config --system --set channel_priority strict
 
-RUN pip3 install --no-cache-dir -r requirements.txt
+RUN ${CONDA_HOME}/bin/conda install mamba -n base -c conda-forge \
+    && ${CONDA_HOME}/bin/mamba install \
+      conda \
+      google-cloud-dataproc \
+      google-cloud-logging \
+      google-cloud-monitoring \
+      google-cloud-storage
 
-COPY . .
+RUN apt update && apt install -y git
+COPY requirements.txt .
+RUN python -m pip install -r requirements.txt
+
+ENV PYTHONPATH=/opt/python/packages
+RUN mkdir -p "${PYTHONPATH}/src/"
+COPY src/ "${PYTHONPATH}/src/"
+COPY main.py .
 
 RUN groupadd -g 1099 spark
 RUN useradd -u 1099 -g 1099 -d /home/spark -m spark
 USER spark
-
-# Expose SQL Server port
-EXPOSE 1433
-
