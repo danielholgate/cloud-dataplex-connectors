@@ -6,7 +6,7 @@ from src.constants import EntryType
 
 
 SPARK_JAR_PATH = "/opt/spark/jars/ojdbc11.jar"
-
+SPARK_JAR_PATH = "ojdbc11.jar"
 
 class OracleConnector:
     """Reads data from Oracle and returns Spark Dataframes."""
@@ -20,9 +20,9 @@ class OracleConnector:
         self._config = config
         # Use correct JDBC connection string depending on Service vs SID
         if ( config['sid'] ):
-            self._url = f"jdbc:oracle:thin:@{config['host']}:{config['_port']}:{config['sid']}"
+            self._url = f"jdbc:oracle:thin:@{config['host']}:{config['port']}:{config['sid']}"
         else:
-            self._url = f"jdbc:oracle:thin:@{config['host']}:{config['_port']}/{config['service']}"
+            self._url = f"jdbc:oracle:thin:@{config['host']}:{config['port']}/{config['service']}"
 
     def _execute(self, query: str) -> DataFrame:
         """A generic method to execute any query."""
