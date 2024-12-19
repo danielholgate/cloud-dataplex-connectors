@@ -20,18 +20,17 @@ This connector imports metadata from SQL Server databases into Google Cloud Data
    pip install -r requirements.txt
 
 3. **Run the connector:**
-   ```bash
-   python3 main.py \
-   --target_project_id [your_gcp_project] \
-   --target_location_id us-central1 \
-   --target_entry_group_id <your-dataplex-entry-group-id> \
-   --host <your-sql-server-host> \
-   --port <your-sql-server-port> \
-   --user <your-sql-server-user> \
-   --password-secret <your-secret-resource-name> \
-   --database <your-sql-server-database> \
-   --output_bucket <your-output-gcs-bucket> \
-   --output_folder <your-output-gcs-folder>
+```shell
+python3 main.py --target_project_id daniel-dataplex \
+--target_location_id us-central1 \
+--target_entry_group_id XXX \
+--host 34.172.176.5 \
+--port 1433 \
+--user dataplexagent \
+--password-secret projects/73813454526/secrets/oraclexe \
+--database XEPDB1 \
+--output_bucket daniel_dataplex_collector_test \
+--output_folder sqlserver
 
 
 ## Build a container image and run the connector with Dataproc Serverless (Allows extraction jobs to be scheduled):

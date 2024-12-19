@@ -36,7 +36,20 @@ class OracleConnector:
 
     def get_db_schemas(self) -> DataFrame:
         """In Oracle, schemas are usernames."""
-        query = "SELECT username FROM dba_users"
+        query = """
+        SELECT username FROM dba_users WHERE username not in 
+        ('SYS','SYSTEM','XS$NULL',
+        'OJVMSYS','LBACSYS','OUTLN',
+        'DBSNMP','APPQOSSYS','DBSFWUSER',
+        'GGSYS','ANONYMOUS','CTXSYS',
+        'DVSYS','DVF','AUDSYS','GSMADMIN_INTERNAL',
+        'OLAPSYS','MDSYS','WMSYS','GSMCATUSER',
+        'MDDATA','SYSBACKUP','REMOTE_SCHEDULER_AGENT',
+        'GSMUSER','SYSRAC','GSMROOTUSER','SI_INFORMTN_SCHEM',
+        'DIP','ORDPLUGINS','SYSKM',
+        'DGPDB_INT','ORDDATA','ORACLE_OCM',
+        'SYS$UMF','SYSD','ORDSYS','SYSDG')
+        """
         return self._execute(query)
 
     def _get_columns(self, schema_name: str, object_type: str) -> str:
