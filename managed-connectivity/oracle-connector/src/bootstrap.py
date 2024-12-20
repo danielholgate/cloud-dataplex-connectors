@@ -2,6 +2,8 @@
 from typing import Dict
 import sys
 
+from datetime import datetime
+
 from src.constants import EntryType
 from src import cmd_reader
 from src import secret_manager
@@ -10,9 +12,10 @@ from src import gcs_uploader
 from src import top_entry_builder
 from src.oracle_connector import OracleConnector
 
+currentDate = datetime.now()
 
+FOLDERNAME = f"{currentDate.hour}{currentDate.min}{currentDate.second}"
 FILENAME = "output.jsonl"
-
 
 def write_jsonl(output_file, json_strings):
     """Writes a list of string to the file in JSONL format."""
@@ -54,7 +57,12 @@ def run():
 
     connector = OracleConnector(config)
 
-    with open(FILENAME, "w", encoding="utf-8") as file:
+    if config['sid'] and len(config['sid'] > 0):
+        FILENAME = f"output-{config['sid']}"
+    else:
+        FILENAME = f"output-{config['service']}"
+
+    with open(FILENAME,   gcs_uploader.upload(config, FOLDERNAME + "/" + FILENAME)"w", encoding="utf-8") as file:
         # Write top entries that don't require connection to the database
         file.writelines(top_entry_builder.create(config, EntryType.INSTANCE))
         file.writelines("\n")
@@ -76,4 +84,4 @@ def run():
             views_json = process_dataset(connector, config, schema, EntryType.VIEW)
             write_jsonl(file, views_json)
 
-    gcs_uploader.upload(config, FILENAME)
+    gcs_uploader.upload(config, FOLDERNAME + "/" + FILENAME)
