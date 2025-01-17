@@ -38,7 +38,7 @@ python3 main.py \
 --host the-sqlserver-server \
 --port 1433 \
 --user dataplexagent \
---password-secret projects/73813454526/dataplexagent_sqlserver \
+--password-secret projects/73813454526/secrets/dataplexagent_sqlserver \
 --database AdventureWorksDW2019 \
 --output_bucket dataplex_connectivity_imports \
 --output_folder sqlserver

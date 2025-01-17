@@ -4,9 +4,7 @@ from pyspark.sql import SparkSession, DataFrame
 
 from src.constants import EntryType
 
-
 SPARK_JAR_PATH = "/opt/spark/jars/mssql-jdbc-9.4.1.jre8.jar"
-
 
 class SQLServerConnector:
     """Reads data from SQL Server and returns Spark Dataframes."""
@@ -18,7 +16,11 @@ class SQLServerConnector:
             .getOrCreate()
 
         self._config = config
-        self._url = f"jdbc:sqlserver://{config['host']}:{config['port']};databaseName={config['database']}"
+
+        if config['instancename'] and len(config['instancename']) > 0:
+            self._url = f"jdbc:sqlserver://{config['host']}\{config['instancename']}:{config['port']}"
+        else:
+            self._url = f"jdbc:sqlserver://{config['host']}:{config['port']};databaseName={config['database']}"
 
     def _execute(self, query: str) -> DataFrame:
         """A generic method to execute any query."""
@@ -28,6 +30,7 @@ class SQLServerConnector:
             .option("query", query) \
             .option("user", self._config["user"]) \
             .option("password", self._config["password"]) \
+            .options("trustServerCertificate","true") \
             .load()
 
     def get_db_schemas(self) -> DataFrame:
