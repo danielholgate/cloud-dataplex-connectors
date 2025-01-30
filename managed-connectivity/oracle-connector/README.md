@@ -74,9 +74,14 @@ The connector generates a metadata extract in JSONL format as described [in the 
 To build a Docker container for the connector (one-time task) and run the extraction process as a Dataproc Serverless job:
 
 ### Build the container
-1. Run the script ```build_and_push_docker.sh``` to build the Docker container and store it in Artifact Registry. This process can take take up to 10 minutes.
-2. Upload the **odjcb11.jar** file to a Google Cloud Storage location (add this path to the **--jars** parameter below)
-3. Create a GCS bucket which will be used for Dataproc Serverless as a working directory (add to the **--deps-bucket** parameter below)
+
+Ensure the user you run the script with has /artifactregistry.repositories.uploadArtifacts on the artficate registry in your project 
+
+1. Ensure you are authenticated to your Google Cloud account by running ```gcloud auth login```
+2. Edit ```build_and_push_docker.sh``` and set PROJECT_ID and REGION_ID to the appropriate values for your project
+2. Run```build_and_push_docker.sh``` to build the Docker container and store it in Artifact Registry. This process can take several minutes.
+3. Upload the **odjcb11.jar** file to a Google Cloud Storage location (add this path to the **--jars** parameter below)
+4. Create a GCS bucket which will be used for Dataproc Serverless as a working directory (add to the **--deps-bucket** parameter below)
 
 ### Submitting a metadata extraction job to Dataproc serverless:
 Once the container is built you can run the metadata extract with the following command (substituting appropriate values for your environment). 
