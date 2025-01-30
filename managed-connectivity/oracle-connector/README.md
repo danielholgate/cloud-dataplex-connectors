@@ -20,8 +20,8 @@ The Oracle connector takes the following parameters:
 |target_entry_group_id|Dataplex Entry Group ID to use in the generated data|MANDATORY|
 |host|Oracle server to connect to|MANDATORY|
 |port|Oracle Server port (usually 1521)|MANDATORY|
-|service|SQL Server instance to connect to. If not provided the default instance will be used|OPTIONAL
-|sid|SQL Server database name|MANDATORY|
+|service|Oracle service to connect to. Either service or sid must be specified|OPTIONAL
+|sid|Oracle SID (Service Identifier). Either service or sid must be specified|OPTIONAL
 |user|Username to connect with|MANDATORY|
 |password-secret|GCP Secret Manager ID holding the password for the user. Format: projects/[PROJ]/secrets/[SECRET]|MANDATORY|
 |output_bucket|GCS bucket where the output file will be stored|MANDATORY|
