@@ -53,10 +53,10 @@ def run():
     print(f"output folder is {FOLDERNAME}")
 
     if config["testing"]=='Y':
-        if config['database'] and len(config['database']) > 0:
-            FILENAME = f"sqlserver-output-{config['database']}"
+        if config['instancename'] and len(config['instancename']) > 0:
+            FILENAME = f"sqlserver-output-{config['instancename']}"
         else:
-            FILENAME = f"sqlserver-output"
+            FILENAME = f"sqlserver-output-default"
         with open(FILENAME, "w", encoding="utf-8") as file:
             file.writelines("TEST OUTPUT FILE\n")
         gcs_uploader.upload(config, FILENAME, FOLDERNAME)
@@ -72,10 +72,10 @@ def run():
     connector = SQLServerConnector(config)
 
     # Build the output file name from connection details
-    if config['database'] and len(config['database']) > 0:
-        FILENAME = f"sqlserver-output-{config['database']}"
+    if config['instancename'] and len(config['instancename']) > 0:
+        FILENAME = f"sqlserver-output-{config['instancename']}"
     else:
-        FILENAME = f"sqlserver-output"
+        FILENAME = f"sqlserver-output-DEFAULT"
 
     with open(FILENAME, "w", encoding="utf-8") as file:
         # Write top entries that don't require connection to the database

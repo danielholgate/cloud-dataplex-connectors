@@ -7,9 +7,10 @@ def upload(config: Dict[str, str], filename: str, folder: str):
     """Uploads a file to GCP bucket."""
     client = storage.Client()
     bucket = client.get_bucket(config["output_bucket"])
-   # folder = config["output_folder"]
+    folder = config["output_folder"]
 
     blob = bucket.blob(f"{folder}/{filename}")
+    print(f"Uploading to {folder}/{filename}...")
     blob.upload_from_filename(filename)
 
 def checkDestination(config: Dict[str, str]):

@@ -26,8 +26,10 @@ def read_args():
     parser.add_argument("--user", type=str, required=True, help="SQL Server User")
     parser.add_argument("--password-secret", type=str, required=True,
         help="Resource name in the Google Cloud Secret Manager for the SQL Server password")
-    parser.add_argument("--instancename", type=str,required=True,
+    parser.add_argument("--instancename", type=str,required=False,
         help="The name of the SQL Server database to extract metadata from")
+    parser.add_argument("--database", type=str,required=True,
+        help="Databases")
 
     # Google Cloud Storage arguments
     # It is assumed that the bucket is in the same region as the entry group
