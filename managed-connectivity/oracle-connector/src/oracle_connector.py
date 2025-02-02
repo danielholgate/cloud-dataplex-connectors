@@ -49,7 +49,7 @@ class OracleConnector:
         'GSMUSER','SYSRAC','GSMROOTUSER','SI_INFORMTN_SCHEM',
         'DIP','ORDPLUGINS','SYSKM','SI_INFORMTN_SCHEMA',
         'DGPDB_INT','ORDDATA','ORACLE_OCM',
-        'SYS$UMF','SYSD','ORDSYS','SYSDG')
+        'SYS$UMF','SYSD','ORDSYS','SYSDG','PDADMIN')
         """
         return self._execute(query)
 

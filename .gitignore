@@ -8,7 +8,9 @@ __pycache__/
 *.py[cod]
 *$py.class
 
-.jar
+*.jar
+*.py.swo
+*.py.swp
 
 # C extensions
 *.so

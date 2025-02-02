@@ -50,7 +50,7 @@ def run():
     """Build the default output filename"""
     FILENAME = SOURCE_TYPE + "-output.jsonl"
 
-    print(f"output folder is {FOLDERNAME}")
+    print(f"output folder is {config['output_bucket']} {FOLDERNAME}")
 
     if config["testing"]=='Y':
         if config['sid'] and len(config['sid']) > 0:
@@ -70,6 +70,9 @@ def run():
         sys.exit()
 
     connector = OracleConnector(config)
+    schemas_count = 0
+    entries_count = 0
+
 
     # Build the output file name from connection details
     if config['sid'] and len(config['sid']) > 0:
@@ -88,15 +91,20 @@ def run():
         schemas = [schema.USERNAME for schema in df_raw_schemas.select("USERNAME").collect()]
         schemas_json = entry_builder.build_schemas(config, df_raw_schemas).toJSON().collect()
 
+        schemas_count = len(schemas_json)
+
         write_jsonl(file, schemas_json)
 
         # Ingest tables and views for every schema in a list
         for schema in schemas:
             print(f"Processing tables for {schema}")
             tables_json = process_dataset(connector, config, schema, EntryType.TABLE)
+            entries_count += len(tables_json)
             write_jsonl(file, tables_json)
             print(f"Processing views for {schema}")
             views_json = process_dataset(connector, config, schema, EntryType.VIEW)
+            entries_count += len(views_json)
             write_jsonl(file, views_json)
 
-    gcs_uploader.upload(config, FILENAME)
+    print(f"{schemas_count + entries_count} rows written to file") 
+    gcs_uploader.upload(config, FILENAME,FOLDERNAME)
