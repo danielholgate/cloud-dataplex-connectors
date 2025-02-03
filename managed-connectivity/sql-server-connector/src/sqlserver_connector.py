@@ -5,7 +5,6 @@ from pyspark.sql import SparkSession, DataFrame
 from src.constants import EntryType
 
 SPARK_JAR_PATH = "/opt/spark/jars/mssql-jdbc-9.4.1.jre8.jar"
-SPARK_JAR_PATH = "./mssql-jdbc.jar"
 
 class SQLServerConnector:
     """Reads data from SQL Server and returns Spark Dataframes."""
