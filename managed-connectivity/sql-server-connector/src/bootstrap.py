@@ -52,16 +52,6 @@ def run():
 
     print(f"output folder is {FOLDERNAME}")
 
-    if config["testing"]=='Y':
-        if config['instancename'] and len(config['instancename']) > 0:
-            FILENAME = f"sqlserver-output-{config['instancename']}"
-        else:
-            FILENAME = f"sqlserver-output-default"
-        with open(FILENAME, "w", encoding="utf-8") as file:
-            file.writelines("TEST OUTPUT FILE\n")
-        gcs_uploader.upload(config, FILENAME, FOLDERNAME)
-        sys.exit()
-
     try:
         config["password"] = secret_manager.get_password(config["password_secret"])
     except Exception as ex:
@@ -70,6 +60,8 @@ def run():
         sys.exit()
 
     connector = SQLServerConnector(config)
+    schemas_count = 0
+    entries_count = 0
 
     # Build the output file name from connection details
     if config['instancename'] and len(config['instancename']) > 0:
@@ -94,9 +86,12 @@ def run():
         for schema in schemas:
             print(f"Processing tables for {schema}")
             tables_json = process_dataset(connector, config, schema, EntryType.TABLE)
+            entries_count += len(tables_json)
             write_jsonl(file, tables_json)
             print(f"Processing views for {schema}")
             views_json = process_dataset(connector, config, schema, EntryType.VIEW)
+            entries_count += len(views_json)
             write_jsonl(file, views_json)
 
-    gcs_uploader.upload(config, FILENAME, FOLDERNAME)
+    print(f"{schemas_count + entries_count} rows written to file") 
+    gcs_uploader.upload(config, FILENAME,FOLDERNAME)

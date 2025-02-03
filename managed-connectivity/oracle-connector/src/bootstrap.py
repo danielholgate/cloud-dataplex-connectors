@@ -52,16 +52,6 @@ def run():
 
     print(f"output folder is {config['output_bucket']} {FOLDERNAME}")
 
-    if config["testing"]=='Y':
-        if config['sid'] and len(config['sid']) > 0:
-            FILENAME = f"oracle-output-{config['sid']}"
-        else:
-            FILENAME = f"oracle-output-{config['service']}"
-        with open(FILENAME, "w", encoding="utf-8") as file:
-            file.writelines("TEST OUTPUT FILE\n")
-        gcs_uploader.upload(config, FILENAME, FOLDERNAME)
-        sys.exit()
-
     try:
         config["password"] = secret_manager.get_password(config["password_secret"])
     except Exception as ex:
