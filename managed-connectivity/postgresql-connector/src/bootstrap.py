@@ -67,6 +67,8 @@ def run():
         sys.exit()
 
     connector = PostgresConnector(config)
+    schemas_count = 0
+    entries_count = 0
 
     # Build the output file name from connection details
     FILENAME = f"postgres-output-{config['database']}"
@@ -84,13 +86,16 @@ def run():
 
         write_jsonl(file, schemas_json)
 
-        # Ingest tables and views for every schema in a list
+           # Ingest tables and views for every schema in a list
         for schema in schemas:
             print(f"Processing tables for {schema}")
             tables_json = process_dataset(connector, config, schema, EntryType.TABLE)
+            entries_count += len(tables_json)
             write_jsonl(file, tables_json)
             print(f"Processing views for {schema}")
             views_json = process_dataset(connector, config, schema, EntryType.VIEW)
+            entries_count += len(views_json)
             write_jsonl(file, views_json)
 
-    gcs_uploader.upload(config, FILENAME, FOLDERNAME)
+    print(f"{schemas_count + entries_count} rows written to file") 
+    gcs_uploader.upload(config, FILENAME,FOLDERNAME)

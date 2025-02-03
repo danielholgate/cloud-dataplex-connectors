@@ -5,6 +5,7 @@ from pyspark.sql import SparkSession, DataFrame
 from src.constants import EntryType
 
 SPARK_JAR_PATH = "/opt/spark/jars/postgresql-42.7.5.jar"
+SPARK_JAR_PATH = "./postgresql-42.7.5.jar"
 
 class PostgresConnector:
     """Reads data from Postgres and returns Spark Dataframes."""
@@ -42,12 +43,14 @@ class PostgresConnector:
         """Gets a list of columns in tables or views in a batch."""
         # Every line here is a column that belongs to the table or to the view.
         # This SQL gets data from ALL the tables in a given schema.
-        return (f"SELECT table_name, column_name,  "
-                f"data_type, is_nullable "
-                f"FROM information_schema.columns "
-                f"WHERE table_schema = '{schema_name}' "
-                f"AND table_catalog = '{self._config['database']}' "
-                f"AND table_type = '{object_type}'")
+        return (f"SELECT c.table_name, c.column_name,  "
+                f"c.data_type, c.is_nullable "
+                f"FROM information_schema.columns c, "
+                f"information_schema.tables t "
+                f"WHERE c.table_schema = '{schema_name}' "
+                f"AND t.table_name = c.table_name AND t.table_schema = c.table_schema "
+                f"AND c.table_catalog = '{self._config['database']}' "
+                f"AND t.table_type = '{object_type}'")
 
     def get_dataset(self, schema_name: str, entry_type: EntryType):
         """Gets data for a table or a view."""
