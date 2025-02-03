@@ -4,6 +4,7 @@ from pyspark.sql import SparkSession, DataFrame
 
 from src.constants import EntryType
 
+SPARK_JAR_PATH = "/opt/spark/jars/postgresql-42.7.5.jar"
 
 class PostgresConnector:
     """Reads data from Postgres and returns Spark Dataframes."""
