@@ -4,5 +4,5 @@ This repo contains connectors to import metadata from external systems into Goog
 
 ## Connectors
 
-* [Oracle](/oracle-connector)
-* [SQL Server](/sql-server-connector)
+* [Oracle](/managed-connectivity/oracle-connector)
+* [SQL Server](/managed-connectivity/sql-server-connector)
