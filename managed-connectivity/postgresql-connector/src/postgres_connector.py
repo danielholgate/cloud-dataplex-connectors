@@ -12,6 +12,7 @@ class PostgresConnector:
     def __init__(self, config: Dict[str, str]):
         # PySpark entrypoint
         self._spark = SparkSession.builder.appName("PostgresIngestor") \
+            .config("spark.jars", SPARK_JAR_PATH) \
             .getOrCreate()
 
         self._config = config
