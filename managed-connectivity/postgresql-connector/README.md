@@ -24,7 +24,7 @@ Be sure to your session is authenticated as a user which has these roles at mini
 
 ### Prepare the environment:
 1. Download **postgresql-42.7.5.jar** [from Postgres](https://jdbc.postgresql.org/download/)
-2. Edit the SPARK_JAR_PATH variable in [postgres_connector.py](src/oracle_connector.py) to match the location of the jar file
+2. Edit the SPARK_JAR_PATH variable in [postgres_connector.py](src/postgres_connector.py) to match the location of the jar file
 3. Ensure a Java Runtime Environment (JRE) is installed in your environment
 4. Install PySpark: `pip3 install pyspark`
 5. Install all dependencies from the requirements.txt file with `pip3 install -r requirements.txt`
