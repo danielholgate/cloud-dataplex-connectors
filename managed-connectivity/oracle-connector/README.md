@@ -15,7 +15,7 @@ You can read more about custom connectors in the documentation for [Dataplex Man
 The Oracle connector takes the following parameters:
 |Parameter|Description|Mandatory/Optional|
 |---------|------------|-------------|
-|target_project_id|Value is GCP Project ID|Project Number, or 'global'. Used in the generated Dataplex Entry, Aspects and AspectTypes|MANDATORY|
+|target_project_id|Value is GCP Project ID/Project Number, or 'global'. Used in the generated Dataplex Entry, Aspects and AspectTypes|MANDATORY|
 |target_location_id|GCP Region ID, or 'global'. Used in the generated Dataplex Entry, Aspects and AspectTypes|MANDATORY|
 |target_entry_group_id|Dataplex Entry Group ID to use in the generated data|MANDATORY|
 |host|Oracle server to connect to|MANDATORY|
