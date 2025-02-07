@@ -66,9 +66,9 @@ def run():
 
     # Build the output file name from connection details
     if config['sid'] and len(config['sid']) > 0:
-        FILENAME = f"oracle-output-{config['sid']}"
+        FILENAME = f"oracle-output-{config['sid']}.jsonl"
     else:
-        FILENAME = f"oracle-output-{config['service']}"
+        FILENAME = f"oracle-output-{config['service']}.jsonl"
 
     with open(FILENAME, "w", encoding="utf-8") as file:
         # Write top entries that don't require connection to the database
