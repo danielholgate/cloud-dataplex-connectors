@@ -71,7 +71,7 @@ def run():
     entries_count = 0
 
     # Build the output file name from connection details
-    FILENAME = f"postgres-output-{config['database']}"
+    FILENAME = f"postgres-output-{config['database']}.jsonl"
 
     with open(FILENAME, "w", encoding="utf-8") as file:
         # Write top entries that don't require connection to the database
