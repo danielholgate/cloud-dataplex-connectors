@@ -9,9 +9,9 @@ from src import name_builder as nb
 @F.udf(returnType=StringType())
 def choose_metadata_type_udf(data_type: str):
     """Choose the metadata type based on Postgres native type."""
-    if data_type.startswith("numeric") or data_type.startswith("int") or data_type.startswith("serial") or  data_type.startswith("double") or  data_type.startswith("decimal") :
+    if data_type in ["numeric","integer","serial","double precision","decimal","smallint","smallserial","bigserial","bigint","real"]:
         return "NUMBER"
-    if data_type.startswith("character") or data_type.startswith("varchar") or data_type.startswith("text"):
+    if data_type.startswith("character") or data_type.startswith("bpchar") or data_type in ["text","varchar"]:
         return "STRING"
     if data_type.startswith("bytea"):
         return "BYTES"
