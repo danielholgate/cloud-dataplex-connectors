@@ -1,7 +1,7 @@
 {
 type: "IMPORT",
 import_spec: {
-source_storage_uri: "gs://dataplex-dataproc-connector-output/postgres/202527-121144/",
+source_storage_uri: "gs://dataplex-dataproc-connector-output/postgresql/202528-133539/",
 scope: {
   entryGroups: [
     "projects/daniel-dataplex/locations/us-central1/entryGroups/postgres"

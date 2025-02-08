@@ -53,7 +53,7 @@ def run():
     print(f"output folder is {FOLDERNAME}")
 
     if config["testing"]=='Y':
-        FILENAME = f"postgres-output-{config['database']}"
+        FILENAME = f"postgresql-output-{config['database']}"
         with open(FILENAME, "w", encoding="utf-8") as file:
             file.writelines("TEST OUTPUT FILE\n")
         gcs_uploader.upload(config, FILENAME, FOLDERNAME)
@@ -71,7 +71,7 @@ def run():
     entries_count = 0
 
     # Build the output file name from connection details
-    FILENAME = f"postgres-output-{config['database']}.jsonl"
+    FILENAME = f"postgresql-output-{config['database']}.jsonl"
 
     with open(FILENAME, "w", encoding="utf-8") as file:
         # Write top entries that don't require connection to the database
