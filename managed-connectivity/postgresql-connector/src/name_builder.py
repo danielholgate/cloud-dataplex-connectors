@@ -49,7 +49,7 @@ def create_name(config: Dict[str, str], entry_type: EntryType,
         return f"{instance}/databases/{config['database']}"
     if entry_type == EntryType.DB_SCHEMA:
         database = create_name(config, EntryType.DATABASE)
-        return f"{database}/databaseSchemas/{schema_name}"
+        return f"{database}/database_schemas/{schema_name}"
     if entry_type == EntryType.TABLE:
         db_schema = create_name(config, EntryType.DB_SCHEMA, schema_name)
         return f"{db_schema}/tables/{table_name}"
