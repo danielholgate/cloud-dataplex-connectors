@@ -1,6 +1,6 @@
 """The entrypoint of a pipeline."""
 from typing import Dict
-import sys
+import sys, os
 
 from datetime import datetime
 
@@ -40,17 +40,17 @@ def run():
     """Runs a pipeline."""
     config = cmd_reader.read_args()
 
-    if not gcs_uploader.checkDestination(config):
+    if not gcs_uploader.checkDestination(config['output_bucket']):
         print("Exiting")
-        sys.exit()
+        sys.exit(1)
 
     """Build the output folder name and filename"""
     currentDate = datetime.now()
     FOLDERNAME = f"{SOURCE_TYPE}/{currentDate.year}{currentDate.month}{currentDate.day}-{currentDate.hour}{currentDate.minute}{currentDate.second}"
     """Build the default output filename"""
-    FILENAME = SOURCE_TYPE + "-output.jsonl"
+    FILENAME = f"{SOURCE_TYPE}-output.jsonl"
 
-    print(f"output folder is {FOLDERNAME}")
+    print(f"Output path is {config['output_bucket']}/{FOLDERNAME}")
 
     if config["testing"]=='Y':
         FILENAME = f"postgresql-output-{config['database']}"
@@ -64,7 +64,7 @@ def run():
     except Exception as ex:
         print(ex)
         print("Exiting")
-        sys.exit()
+        sys.exit(1)
 
     connector = PostgresConnector(config)
     schemas_count = 0
@@ -73,7 +73,13 @@ def run():
     # Build the output file name from connection details
     FILENAME = f"postgresql-output-{config['database']}.jsonl"
 
-    with open(FILENAME, "w", encoding="utf-8") as file:
+    output_path = './output'
+
+    # check whether directory already exists
+    if not os.path.exists(output_path):
+        os.mkdir(output_path)
+
+    with open(f"{output_path}/{FILENAME}", "w", encoding="utf-8") as file:
         # Write top entries that don't require connection to the database
         file.writelines(top_entry_builder.create(config, EntryType.INSTANCE))
         file.writelines("\n")
