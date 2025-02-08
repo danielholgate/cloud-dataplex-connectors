@@ -17,15 +17,15 @@ The PostgreSQL connector takes the following parameters:
 |Parameter|Description|Mandatory/Optional|
 |---------|------------|-------------|
 |target_project_id|GCP Project ID/Project Number, or 'global'. Used in the generated Dataplex Entry, Aspects and AspectTypes|MANDATORY|
-|target_location_id|GCP Region ID, or 'global'. Used in the generated Dataplex Entry, Aspects and AspectTypes|MANDATORY|
+|target_location_id|GCP Region ID, or 'global'. Used in the generated Dataplex Entry, Aspects and Aspect Types|MANDATORY|
 |target_entry_group_id|Dataplex Entry Group ID to use in the generated entries|MANDATORY|
 |host|PostgreSQL server to connect to|MANDATORY|
 |port|PostgreSQL server port (usually 5432)|MANDATORY|
-|database|PostgreSQL database to connect to. **One of either service or sid must be specified**|MANDATORY
+|database|PostgreSQL database to connect to|MANDATORY
 |user|PostgreSQL username to connect with|MANDATORY|
-|password-secret|GCP Secret Manager ID holding the password for the Oracle user. Format: projects/[PROJ]/secrets/[SECRET]|MANDATORY|
-|output_bucket|GCS bucket where the output file will be stored|MANDATORY|
-|output_folder|Folder in the GCS bucket where the export output file will be stored|MANDATORY|
+|password-secret|GCP Secret Manager ID holding the password for the PostgreSQL user. Format: projects/[PROJ]/secrets/[SECRET]|MANDATORY|
+|output_bucket|GCS bucket where generated metadata file will be stored|MANDATORY|
+|output_folder|Folder in the GCS bucket where output file will be stored|MANDATORY|
 
 ## Extract metadata by running the connector from the command line:
 
