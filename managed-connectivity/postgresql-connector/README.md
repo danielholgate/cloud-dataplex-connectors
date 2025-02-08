@@ -57,7 +57,7 @@ python3 main.py \
 --user dataplexagent \
 --password-secret projects/73813454526/secrets/dataplexagent_postgres \
 --database my_database \
---output_bucket dataplex_connectivity_imports \
+--output_bucket gs://dataplex_connectivity_imports \
 --output_folder postgresql
 ```
 
@@ -107,7 +107,7 @@ gcloud dataproc batches submit pyspark \
     --user dataplexagent \
     --password-secret projects/73813454526/secrets/dataplexagent_postgres \
     --database my_database \
-    --output_bucket dataplex_connectivity_imports \
+    --output_bucket gs://dataplex_connectivity_imports \
     --output_folder postgresql
 ```
 
