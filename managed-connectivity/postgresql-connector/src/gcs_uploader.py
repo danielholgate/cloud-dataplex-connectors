@@ -15,12 +15,11 @@ def checkDestination(bucketpath: str):
     """Check GCS output folder exists"""
     client = storage.Client()
 
-    if not bucketpath.startswith("gs://"):
-        print(f"Output cloud storage bucket {bucketpath} must started with gs://")
+    if bucketpath.startswith("gs://"):
+        print(f"Please provide output cloud storage bucket {bucketpath} without gs:// prefix")
         return False
     
-    checkpath = (bucketpath[5:])
-    bucket = client.bucket(checkpath)
+    bucket = client.bucket(bucketpath)
 
     if not bucket.exists():
         print(f"Output cloud storage bucket {bucketpath} does not exist")

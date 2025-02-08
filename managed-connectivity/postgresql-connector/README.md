@@ -24,7 +24,7 @@ The PostgreSQL connector takes the following parameters:
 |database|PostgreSQL database to connect to|MANDATORY
 |user|PostgreSQL username to connect with|MANDATORY|
 |password-secret|GCP Secret Manager ID holding the password for the PostgreSQL user. Format: projects/[PROJ]/secrets/[SECRET]|MANDATORY|
-|output_bucket|GCS bucket where generated metadata file will be stored|MANDATORY|
+|output_bucket|GCS bucket where generated metadata file will be stored. Without gs:// prefix|MANDATORY|
 |output_folder|Folder in the GCS bucket where output file will be stored|MANDATORY|
 
 ## Extract metadata by running the connector from the command line:
@@ -57,7 +57,7 @@ python3 main.py \
 --user dataplexagent \
 --password-secret projects/73813454526/secrets/dataplexagent_postgres \
 --database my_database \
---output_bucket gs://dataplex_connectivity_imports \
+--output_bucket dataplex_connectivity_imports \
 --output_folder postgresql
 ```
 
@@ -107,7 +107,7 @@ gcloud dataproc batches submit pyspark \
     --user dataplexagent \
     --password-secret projects/73813454526/secrets/dataplexagent_postgres \
     --database my_database \
-    --output_bucket gs://dataplex_connectivity_imports \
+    --output_bucket dataplex_connectivity_imports \
     --output_folder postgresql
 ```
 
