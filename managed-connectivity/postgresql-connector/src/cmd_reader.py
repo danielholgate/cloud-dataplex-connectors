@@ -9,25 +9,25 @@ def read_args():
 
     # Project arguments
     parser.add_argument("--target_project_id", type=str, required=True,
-        help="The name of the target Google Cloud project to import the metadata into.")
+        help="Name of the Google Cloud project to generate Dataplex entries and aspects with")
     parser.add_argument("--target_location_id", type=str, required=True,
-        help="The target Google Cloud location where the metadata will be imported into.")
+        help="Name of the location to generate Dataplex entries and aspects wit")
     parser.add_argument("--target_entry_group_id", type=str, required=True,
         help="The ID of the Dataplex Entry Group to import metadata into. "
              "Metadata will be imported into entry group with the following"
              "full resource name: projects/${target_project_id}/"
              "locations/${target_location_id}/entryGroups/${target_entry_group_id}.")
 
-    # Postgres specific arguments
+    # PostgreSQL specific arguments
     parser.add_argument("--host", type=str, required=True,
-        help="The Postgres host server")
+        help="The PostgreSQL host server")
     parser.add_argument("--port", type=str, required=True,
         help="The port number (usually 5432)")
     parser.add_argument("--user", type=str, required=True, help="Postgres User")
     parser.add_argument("--password-secret", type=str, required=True,
-        help="Resource name in the Google Cloud Secret Manager for the Postgres password")
+        help=" Google Cloud Secret Manager ID for the Postgres password")
     parser.add_argument("--database", type=str, required=True,
-        help="The name of the Postgres database to extract metadata from")
+        help="Nname of the Postgres database to extract metadata from")
  
 
     # Google Cloud Storage arguments
