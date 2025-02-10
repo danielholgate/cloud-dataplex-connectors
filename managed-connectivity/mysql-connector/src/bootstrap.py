@@ -40,7 +40,7 @@ def run():
     """Runs a pipeline."""
     config = cmd_reader.read_args()
 
-    if not gcs_uploader.checkDestination(config['upload_bucket']):
+    if not gcs_uploader.checkDestination(config['output_bucket']):
         print("Exiting")
         sys.exit()
 
