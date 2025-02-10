@@ -16,7 +16,7 @@ class MysqlConnector:
             .getOrCreate()
 
         self._config = config
-        self._url = f"jdbc:mysql://{config['host']}:{config['port']}/{config['database']}?zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false"
+        self._url = f"jdbc:mysql://{config['host']}:{config['port']}/{config['database']}?zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&allowPublicKeyRetrieval=true"
 
     def _execute(self, query: str) -> DataFrame:
         """A generic method to execute any query."""
