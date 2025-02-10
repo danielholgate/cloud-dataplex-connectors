@@ -16,7 +16,6 @@ class MysqlConnector:
             .getOrCreate()
 
         self._config = config
-        # Use correct JDBC connection string depending on Service vs SID
         self._url = f"jdbc:mysql://{config['host']}:{config['port']}/{config['database']}?zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false"
 
     def _execute(self, query: str) -> DataFrame:

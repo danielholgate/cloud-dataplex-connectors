@@ -64,8 +64,8 @@ def run():
     entries_count = 0
 
     # Build the output file name from connection details
-    if config['instancename'] and len(config['instancename']) > 0:
-        FILENAME = f"sqlserver-output-{config['instancename']}.jsonl"
+    if config['instancename'] and len(config['database']) > 0:
+        FILENAME = f"sqlserver-output-{config['database']}.jsonl"
     else:
         FILENAME = f"sqlserver-output-DEFAULT.jsonl"
 
