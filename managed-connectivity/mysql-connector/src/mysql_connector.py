@@ -4,18 +4,20 @@ from pyspark.sql import SparkSession, DataFrame
 
 from src.constants import EntryType
 
+SPARK_JAR_PATH = "/opt/spark/jars/mysql-connector-j-9.2.0.jar"
 
 class MysqlConnector:
     """Reads data from Mysql and returns Spark Dataframes."""
 
     def __init__(self, config: Dict[str, str]):
         # PySpark entrypoint
-        self._spark = SparkSession.builder.appName("MysqlIngestor") \
+        self._spark = SparkSession.builder.appName("OracleIngestor") \
+            .config("spark.jars", SPARK_JAR_PATH) \
             .getOrCreate()
 
         self._config = config
         # Use correct JDBC connection string depending on Service vs SID
-        self._url = f"jdbc:mysql://{config['host']}:{config['port']}/{config['database']}?zeroDateTimeBehavior=convertToNull&useSSL=false"
+        self._url = f"jdbc:mysql://{config['host']}:{config['port']}/{config['database']}?zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false"
 
     def _execute(self, query: str) -> DataFrame:
         """A generic method to execute any query."""
