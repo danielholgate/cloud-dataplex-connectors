@@ -36,7 +36,7 @@ class OracleConnector:
 
     def get_db_schemas(self) -> DataFrame:
         """In Oracle, schemas are usernames."""
-        """Query selects all schemas, excluding system schemas"""
+        """Query schemas to collect metadata for, excluding Oracle system schemas"""
         query = """
         SELECT username FROM dba_users WHERE username not in 
         ('SYS','SYSTEM','XS$NULL',
@@ -46,8 +46,7 @@ class OracleConnector:
         'DVSYS','DVF','AUDSYS','GSMADMIN_INTERNAL',
         'OLAPSYS','MDSYS','WMSYS','GSMCATUSER',
         'MDDATA','SYSBACKUP','REMOTE_SCHEDULER_AGENT',
-        'GSMUSER','SYSRAC','GSMROOTUSER','SI_INFORMTN_SCHEM',
-        'DIP','ORDPLUGINS','SYSKM','SI_INFORMTN_SCHEMA',
+        'GSMUSER','SYSRAC','GSMROOTUSER','DIP','ORDPLUGINS','SYSKM','SI_INFORMTN_SCHEMA',
         'DGPDB_INT','ORDDATA','ORACLE_OCM',
         'SYS$UMF','SYSD','ORDSYS','SYSDG','PDADMIN')
         """

@@ -50,7 +50,7 @@ def run():
     """Build the default output filename"""
     FILENAME = SOURCE_TYPE + "-output.jsonl"
 
-    print(f"output folder is {config['output_bucket']} {FOLDERNAME}")
+    print(f"output folder is {config['output_bucket']}/{FOLDERNAME}")
 
     try:
         config["password"] = secret_manager.get_password(config["password_secret"])
@@ -62,7 +62,6 @@ def run():
     connector = OracleConnector(config)
     schemas_count = 0
     entries_count = 0
-
 
     # Build the output file name from connection details
     if config['sid'] and len(config['sid']) > 0:
