@@ -55,7 +55,7 @@ To execute the metadata extraction run the following command (substituting appro
 python3 main.py \
 --target_project_id my-gcp-project-id \
 --target_location_id us-central1 \
---target_entry_group_id mysqldbs \
+--target_entry_group_id mysql \
 --host the-mysql-server \
 --port 3306 \
 --user dataplexagent \
@@ -66,7 +66,7 @@ python3 main.py \
 ```
 
 #### Output:
-The connector generates a metadata extract in JSONL format as described [in the documentation](https://cloud.google.com/dataplex/docs/import-metadata#metadata-import-file). A sample output from the Mysql connector can be found [here](sample/mysql_output_sample.jsonl)
+The connector generates a metadata extract in JSONL format as described [in the documentation](https://cloud.google.com/dataplex/docs/import-metadata#metadata-import-file). A sample output from the Mysql connector can be found [here](sample/mysql_output_classicmodels_db.jsonl)
 
 ### Build a container and extract metadata with a Dataproc Serverless job:
 
@@ -113,7 +113,7 @@ gcloud dataproc batches submit pyspark \
     main.py \
 --  --target_project_id my-gcp-project-id \
       --target_location_id us-central1	\
-      --target_entry_group_id myEntryGroup \
+      --target_entry_group_id mysql \
       --host the-mysql-server \
       --port 3306 \
       --user dataplexagent \
