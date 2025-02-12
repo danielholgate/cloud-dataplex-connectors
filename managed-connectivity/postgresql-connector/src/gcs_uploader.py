@@ -6,7 +6,7 @@ from google.cloud import storage
 def upload(config: Dict[str, str], filename: str, folder: str):
     """Uploads a file to GCP bucket."""
     client = storage.Client()
-    bucket = client.get_bucket((config["output_bucket"][5:]))
+    bucket = client.get_bucket((config["output_bucket"]))
 
     blob = bucket.blob(f"{folder}/{filename}")
     blob.upload_from_filename(filename)
