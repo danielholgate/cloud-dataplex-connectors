@@ -4,7 +4,7 @@ from pyspark.sql import SparkSession, DataFrame
 
 from src.constants import EntryType
 
-SPARK_JAR_PATH = "/opt/spark/jars/mysql-connector-j-9.2.0.jar"
+SPARK_JAR_PATH = "./mysql-connector-j-9.2.0.jar"
 
 class MysqlConnector:
     """Reads data from Mysql and returns Spark Dataframes."""
@@ -37,11 +37,14 @@ class MysqlConnector:
         """Gets a list of columns in tables or views in a batch."""
         # Every line here is a column that belongs to the table or to the view.
         # This SQL gets data from ALL the tables in a given schema.
-        return (f"SELECT TABLE_NAME, COLUMN_NAME, "
-                f"COLUMN_TYPE, IS_NULLABLE "
-                f"FROM INFORMATION_SCHEMA.COLUMNS "
-                f"WHERE TABLE_SCHEMA = '{schema_name}' "
-                f"AND TABLE_TYPE = '{object_type}'")
+        return(f"select tab.table_name,col.column_name,col.data_type,col.is_nullable "
+                f"from information_schema.tables as tab "
+                f"inner join information_schema.columns as col "
+                f"on col.table_schema = tab.table_schema "
+                f"and col.table_name = tab.table_name "
+                f"where tab.table_type = '{object_type}' "
+                f"and tab.table_schema = '{self._config['database']}' "
+                f"order by tab.table_name,col.column_name") 
 
     def get_dataset(self, schema_name: str, entry_type: EntryType):
         """Gets data for a table or a view."""

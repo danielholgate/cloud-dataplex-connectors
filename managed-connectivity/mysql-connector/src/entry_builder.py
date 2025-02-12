@@ -115,7 +115,7 @@ def build_dataset(config, df_raw, db_schema, entry_type):
     df = df_raw \
       .withColumn("mode", F.when(F.col("IS_NULLABLE") == 'YES', "NULLABLE").otherwise("REQUIRED")) \
       .drop("IS_NULLABLE") \
-      .withColumnRenamed("COLUMN_TYPE", "dataType") \
+      .withColumnRenamed("DATA_TYPE", "dataType") \
       .withColumn("metadataType", choose_metadata_type_udf("dataType")) \
       .withColumnRenamed("COLUMN_NAME", "name")
 
