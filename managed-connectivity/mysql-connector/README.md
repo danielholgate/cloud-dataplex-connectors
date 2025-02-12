@@ -23,7 +23,7 @@ The Mysql connector takes the following parameters:
 |database|Mysql database to connect to|MANDATORY|
 |user|Mysql Username to connect with|MANDATORY|
 |password-secret|GCP Secret Manager ID holding the password for the Mysql user. Format: projects/[PROJ]/secrets/[SECRET]|MANDATORY|
-|output_bucket|GCS bucket where the output file will be stored|MANDATORY|
+|output_bucket|GCS bucket where the output file will be stored (do not include gs:// prefix)|MANDATORY|
 |output_folder|Folder in the GCS bucket where the export output file will be stored|MANDATORY|
 
 ## Running the connector
