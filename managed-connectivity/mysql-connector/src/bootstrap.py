@@ -50,7 +50,7 @@ def run():
     """Build the default output filename"""
     FILENAME = SOURCE_TYPE + "-output.jsonl"
 
-    print(f"output folder is {FOLDERNAME}")
+    print(f"Output path is {config['output_bucket']}/{FOLDERNAME}")
 
     try:
         config["password"] = secret_manager.get_password(config["password_secret"])
