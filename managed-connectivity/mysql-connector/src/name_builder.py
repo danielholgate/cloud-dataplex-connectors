@@ -3,16 +3,9 @@ from typing import Dict
 from src.constants import EntryType, SOURCE_TYPE
 
 
-# Mysql cluster users start with C## prefix, but Dataplex doesn't accept #.
 # In that case in names it is changed to C!!, and escaped with backticks in FQNs
 FORBIDDEN_SYMBOL = "#"
 ALLOWED_SYMBOL = "!"
-
-
-# Allow for using SID or Service name to connect
-def get_database(config: Dict[str, str]):
-    return config['database']
-
 
 def create_fqn(config: Dict[str, str], entry_type: EntryType,
                schema_name: str = "", table_name: str = ""):
@@ -25,13 +18,13 @@ def create_fqn(config: Dict[str, str], entry_type: EntryType,
         return f"{SOURCE_TYPE}:`{config['host']}`"
     if entry_type == EntryType.DATABASE:
         instance = create_fqn(config, EntryType.INSTANCE)
-        return f"{instance}.{get_database(config)}"
+        return f"{instance}.{config['database']}"
     if entry_type == EntryType.DB_SCHEMA:
         database = create_fqn(config, EntryType.DATABASE)
-        return f"{get_database(config)}.{schema_name}"
+        return f"{config['database']}.{schema_name}"
     if entry_type in [EntryType.TABLE, EntryType.VIEW]:
         database = create_fqn(config, EntryType.DATABASE)
-        return f"{get_database(config)}.{schema_name}.{table_name}"
+        return f"{config['database']}.{schema_name}.{table_name}"
     return ""
 
 
