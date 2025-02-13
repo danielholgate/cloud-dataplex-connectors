@@ -4,9 +4,7 @@ from pyspark.sql import SparkSession, DataFrame
 
 from src.constants import EntryType
 
-
 SPARK_JAR_PATH = "/opt/spark/jars/ojdbc11.jar"
-SPARK_JAR_PATH="./ojdbc11.jar"
 
 class OracleConnector:
     """Reads data from Oracle and returns Spark Dataframes."""
