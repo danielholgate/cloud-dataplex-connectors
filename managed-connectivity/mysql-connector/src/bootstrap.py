@@ -1,6 +1,6 @@
 """The entrypoint of a pipeline."""
 from typing import Dict
-import sys
+import sys,os
 
 from datetime import datetime
 
@@ -17,28 +17,9 @@ def write_jsonl(output_file, json_strings):
     """Writes a list of string to the file in JSONL format."""
 
     # For simplicity, dataset is written into the one file. But it is not
-    # mandatory, and the order doesn't matter for Import API.
-    # The PySpark itself could dump entries into many smaller JSONL files.
-    # Due to performance, it's recommended to dump to many smaller files.
-    for string in json_strings:
-        output_file.write(string + "\n")
+    # mandatory, a
 
-
-def process_dataset(
-    connector: MysqlConnector,
-    config: Dict[str, str],
-    schema_name: str,
-    entry_type: EntryType,
-):
-    """Builds dataset and converts it to jsonl."""
-    df_raw = connector.get_dataset(schema_name, entry_type)
-    df = entry_builder.build_dataset(config, df_raw, schema_name, entry_type)
-    return df.toJSON().collect()
-
-
-def run():
-    """Runs a pipeline."""
-    config = cmd_reader.read_args()
+    with open(FILENAME, "w", encoding="utf-8") as file:reader.read_args()
 
     if not gcs_uploader.checkDestination(config['output_bucket']):
         print("Exiting")
@@ -50,7 +31,7 @@ def run():
     """Build the default output filename"""
     FILENAME = SOURCE_TYPE + "-output.jsonl"
 
-    print(f"Output path is {config['output_bucket']}/{FOLDERNAME}")
+    print(f"Output GCS path is {config['output_bucket']}/{FOLDERNAME}")
 
     try:
         config["password"] = secret_manager.get_password(config["password_secret"])
@@ -64,12 +45,14 @@ def run():
     entries_count = 0
 
     # Build the output file name from connection details
-    if config['database'] and len(config['database']) > 0:
-        FILENAME = f"sqlserver-output-{config['database']}.jsonl"
-    else:
-        FILENAME = f"sqlserver-output-DEFAULT.jsonl"
+    FILENAME = f"sqlserver-output-{config['database']}.jsonl"
+    output_path = './output'
 
-    with open(FILENAME, "w", encoding="utf-8") as file:
+    # check whether directory already exists
+    if not os.path.exists(output_path):
+        os.mkdir(output_path)
+
+    with open(f"{output_path}/{FILENAME}", "w", encoding="utf-8") as file:
         # Write top entries that don't require connection to the database
         file.writelines(top_entry_builder.create(config, EntryType.INSTANCE))
         file.writelines("\n")
