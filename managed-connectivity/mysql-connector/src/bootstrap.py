@@ -11,7 +11,7 @@ from src import secret_manager
 from src import entry_builder
 from src import gcs_uploader
 from src import top_entry_builder
-from src.oracle_connector import OracleConnector
+from src.mysql_connector import MysqlConnector
 
 def write_jsonl(output_file, json_strings):
     """Writes a list of string to the file in JSONL format."""
@@ -25,7 +25,7 @@ def write_jsonl(output_file, json_strings):
 
 
 def process_dataset(
-    connector: OracleConnector,
+    connector: MysqlConnector,
     config: Dict[str, str],
     schema_name: str,
     entry_type: EntryType,
@@ -40,7 +40,7 @@ def run():
     """Runs a pipeline."""
     config = cmd_reader.read_args()
 
-    if not gcs_uploader.checkDestination(config):
+    if not gcs_uploader.checkDestination(config['output_bucket']):
         print("Exiting")
         sys.exit()
 
@@ -50,7 +50,7 @@ def run():
     """Build the default output filename"""
     FILENAME = SOURCE_TYPE + "-output.jsonl"
 
-    print(f"output folder is {config['output_bucket']}/{FOLDERNAME}")
+    print(f"Output path is {config['output_bucket']}/{FOLDERNAME}")
 
     try:
         config["password"] = secret_manager.get_password(config["password_secret"])
@@ -59,15 +59,15 @@ def run():
         print("Exiting")
         sys.exit()
 
-    connector = OracleConnector(config)
+    connector = MysqlConnector(config)
     schemas_count = 0
     entries_count = 0
 
     # Build the output file name from connection details
-    if config['sid'] and len(config['sid']) > 0:
-        FILENAME = f"oracle-output-{config['sid']}.jsonl"
+    if config['database'] and len(config['database']) > 0:
+        FILENAME = f"sqlserver-output-{config['database']}.jsonl"
     else:
-        FILENAME = f"oracle-output-{config['service']}.jsonl"
+        FILENAME = f"sqlserver-output-DEFAULT.jsonl"
 
     with open(FILENAME, "w", encoding="utf-8") as file:
         # Write top entries that don't require connection to the database
@@ -77,10 +77,8 @@ def run():
 
         # Get schemas, write them and collect to the list
         df_raw_schemas = connector.get_db_schemas()
-        schemas = [schema.USERNAME for schema in df_raw_schemas.select("USERNAME").collect()]
+        schemas = [schema.SCHEMA_NAME for schema in df_raw_schemas.select("SCHEMA_NAME").collect()]
         schemas_json = entry_builder.build_schemas(config, df_raw_schemas).toJSON().collect()
-
-        schemas_count = len(schemas_json)
 
         write_jsonl(file, schemas_json)
 

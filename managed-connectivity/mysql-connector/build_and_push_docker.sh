@@ -1,10 +1,10 @@
 #!/bin/bash
 
-IMAGE=dataplex-oracle-pyspark:0.0.2
+IMAGE=dataplex-mysql-pyspark:0.0.2
 PROJECT=daniel-dataplex
 REGION=us-central1
 
-REPO_IMAGE=${REGION}-docker.pkg.dev/${PROJECT}/docker-repo/dataplex-oracle-pyspark
+REPO_IMAGE=${REGION}-docker.pkg.dev/${PROJECT}/docker-repo/dataplex-mysql-pyspark
 
 docker build -t "${IMAGE}" .
 

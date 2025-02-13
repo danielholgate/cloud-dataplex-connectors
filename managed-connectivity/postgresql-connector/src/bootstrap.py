@@ -1,6 +1,6 @@
 """The entrypoint of a pipeline."""
 from typing import Dict
-import sys
+import sys, os
 
 from datetime import datetime
 
@@ -11,7 +11,7 @@ from src import secret_manager
 from src import entry_builder
 from src import gcs_uploader
 from src import top_entry_builder
-from src.oracle_connector import OracleConnector
+from src.postgres_connector import PostgresConnector
 
 def write_jsonl(output_file, json_strings):
     """Writes a list of string to the file in JSONL format."""
@@ -25,7 +25,7 @@ def write_jsonl(output_file, json_strings):
 
 
 def process_dataset(
-    connector: OracleConnector,
+    connector: PostgresConnector,
     config: Dict[str, str],
     schema_name: str,
     entry_type: EntryType,
@@ -40,36 +40,46 @@ def run():
     """Runs a pipeline."""
     config = cmd_reader.read_args()
 
-    if not gcs_uploader.checkDestination(config):
+    if not gcs_uploader.checkDestination(config['output_bucket']):
         print("Exiting")
-        sys.exit()
+        sys.exit(1)
 
     """Build the output folder name and filename"""
     currentDate = datetime.now()
     FOLDERNAME = f"{SOURCE_TYPE}/{currentDate.year}{currentDate.month}{currentDate.day}-{currentDate.hour}{currentDate.minute}{currentDate.second}"
     """Build the default output filename"""
-    FILENAME = SOURCE_TYPE + "-output.jsonl"
+    FILENAME = f"{SOURCE_TYPE}-output.jsonl"
 
-    print(f"output folder is {config['output_bucket']}/{FOLDERNAME}")
+    print(f"Output path is {config['output_bucket']}/{FOLDERNAME}")
+
+    if config["testing"]=='Y':
+        FILENAME = f"postgresql-output-{config['database']}"
+        with open(FILENAME, "w", encoding="utf-8") as file:
+            file.writelines("TEST OUTPUT FILE\n")
+        gcs_uploader.upload(config, FILENAME, FOLDERNAME)
+        sys.exit()
 
     try:
         config["password"] = secret_manager.get_password(config["password_secret"])
     except Exception as ex:
         print(ex)
         print("Exiting")
-        sys.exit()
+        sys.exit(1)
 
-    connector = OracleConnector(config)
+    connector = PostgresConnector(config)
     schemas_count = 0
     entries_count = 0
 
     # Build the output file name from connection details
-    if config['sid'] and len(config['sid']) > 0:
-        FILENAME = f"oracle-output-{config['sid']}.jsonl"
-    else:
-        FILENAME = f"oracle-output-{config['service']}.jsonl"
+    FILENAME = f"postgresql-output-{config['database']}.jsonl"
 
-    with open(FILENAME, "w", encoding="utf-8") as file:
+    output_path = './output'
+
+    # check whether directory already exists
+    if not os.path.exists(output_path):
+        os.mkdir(output_path)
+
+    with open(f"{output_path}/{FILENAME}", "w", encoding="utf-8") as file:
         # Write top entries that don't require connection to the database
         file.writelines(top_entry_builder.create(config, EntryType.INSTANCE))
         file.writelines("\n")
@@ -77,14 +87,12 @@ def run():
 
         # Get schemas, write them and collect to the list
         df_raw_schemas = connector.get_db_schemas()
-        schemas = [schema.USERNAME for schema in df_raw_schemas.select("USERNAME").collect()]
+        schemas = [schema.schema_name for schema in df_raw_schemas.select("schema_name").collect()]
         schemas_json = entry_builder.build_schemas(config, df_raw_schemas).toJSON().collect()
-
-        schemas_count = len(schemas_json)
 
         write_jsonl(file, schemas_json)
 
-        # Ingest tables and views for every schema in a list
+           # Ingest tables and views for every schema in a list
         for schema in schemas:
             print(f"Processing tables for {schema}")
             tables_json = process_dataset(connector, config, schema, EntryType.TABLE)
@@ -96,4 +104,4 @@ def run():
             write_jsonl(file, views_json)
 
     print(f"{schemas_count + entries_count} rows written to file") 
-    gcs_uploader.upload(config, FILENAME,FOLDERNAME)
+    gcs_uploader.upload(config,f"{output_path}/{FILENAME}",FOLDERNAME)

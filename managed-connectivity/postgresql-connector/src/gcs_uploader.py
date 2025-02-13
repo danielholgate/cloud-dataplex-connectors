@@ -2,6 +2,7 @@
 from typing import Dict
 from google.cloud import storage
 
+
 def upload(config: Dict[str, str], filename: str, folder: str):
     """Uploads a file to GCP bucket."""
     client = storage.Client()

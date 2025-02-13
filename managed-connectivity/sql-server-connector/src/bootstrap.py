@@ -65,9 +65,9 @@ def run():
 
     # Build the output file name from connection details
     if config['instancename'] and len(config['instancename']) > 0:
-        FILENAME = f"sqlserver-output-{config['instancename']}"
+        FILENAME = f"sqlserver-output-{config['instancename']}.jsonl"
     else:
-        FILENAME = f"sqlserver-output-DEFAULT"
+        FILENAME = f"sqlserver-output-DEFAULT.jsonl"
 
     with open(FILENAME, "w", encoding="utf-8") as file:
         # Write top entries that don't require connection to the database
