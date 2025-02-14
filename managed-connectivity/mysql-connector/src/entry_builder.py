@@ -138,8 +138,8 @@ def build_dataset(config, df_raw, db_schema, entry_type):
                                         F.lit(schema_key),
                                         F.lit("data"),
                                         F.create_map(F.lit("fields"),
-                                                     F.col("fields")))\
-                                    )\
+                                                     F.col("fields")))
+                                    )
                        )\
       .withColumn("entry_aspect", create_entry_aspect(entry_aspect_name)) \
     .drop("fields")
