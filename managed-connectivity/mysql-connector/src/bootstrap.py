@@ -95,4 +95,4 @@ def run():
             write_jsonl(file, views_json)
 
     print(f"{schemas_count + entries_count} rows written to file") 
-    gcs_uploader.upload(config,f"{output_path}/{FILENAME}",FOLDERNAME)
+    gcs_uploader.upload(config,output_path,FILENAME,FOLDERNAME)
