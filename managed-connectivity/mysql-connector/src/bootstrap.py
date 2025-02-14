@@ -63,7 +63,7 @@ def run():
     entries_count = 0
 
     # Build the output file name from connection details
-    FILENAME = f"sqlserver-output-{config['database']}.jsonl"
+    FILENAME = f"{SOURCE_TYPE}-output-{config['database']}.jsonl"
     output_path = './output'
 
     # check whether directory already exists
@@ -95,4 +95,4 @@ def run():
             write_jsonl(file, views_json)
 
     print(f"{schemas_count + entries_count} rows written to file") 
-    gcs_uploader.upload(config, FILENAME,FOLDERNAME)
+    gcs_uploader.upload(config,f"{output_path}/{FILENAME}",FOLDERNAME)
