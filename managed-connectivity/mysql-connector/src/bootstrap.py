@@ -41,7 +41,7 @@ def run():
 
     if not gcs_uploader.checkDestination(config['output_bucket']):
         print("Exiting")
-        sys.exit()
+        sys.exit(1)
 
     """Build the output folder name and filename"""
     currentDate = datetime.now()
@@ -49,7 +49,7 @@ def run():
     """Build the default output filename"""
     FILENAME = SOURCE_TYPE + "-output.jsonl"
 
-    print(f"Output path is {config['output_bucket']}/{FOLDERNAME}")
+    print(f"GCS output path is {config['output_bucket']}/{FOLDERNAME}")
 
     try:
         config["password"] = secret_manager.get_password(config["password_secret"])

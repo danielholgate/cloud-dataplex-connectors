@@ -21,10 +21,10 @@ def create_fqn(config: Dict[str, str], entry_type: EntryType,
         return f"{instance}.{config['database']}"
     if entry_type == EntryType.DB_SCHEMA:
         database = create_fqn(config, EntryType.DATABASE)
-        return f"{config['database']}.{schema_name}"
+        return f"{database}.{schema_name}"
     if entry_type in [EntryType.TABLE, EntryType.VIEW]:
         database = create_fqn(config, EntryType.DATABASE)
-        return f"{config['database']}.{schema_name}.{table_name}"
+        return f"{database}.{schema_name}.{table_name}"
     return ""
 
 
@@ -46,7 +46,7 @@ def create_name(config: Dict[str, str], entry_type: EntryType,
         return f"{instance}/databases/{config['database']}"
     if entry_type == EntryType.DB_SCHEMA:
         database = create_name(config, EntryType.DATABASE)
-        return f"{config['database']}/database_schemas/{schema_name}"
+        return f"{database}/database_schemas/{schema_name}"
     if entry_type == EntryType.TABLE:
         db_schema = create_name(config, EntryType.DB_SCHEMA, schema_name)
         return f"{db_schema}/tables/{table_name}"
