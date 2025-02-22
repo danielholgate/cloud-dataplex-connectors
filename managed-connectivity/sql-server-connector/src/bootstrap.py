@@ -69,7 +69,13 @@ def run():
     else:
         FILENAME = f"sqlserver-output-DEFAULT.jsonl"
 
-    with open(FILENAME, "w", encoding="utf-8") as file:
+    output_path = './output'
+
+    # check whether directory already exists
+    if not os.path.exists(output_path):
+        os.mkdir(output_path)
+
+    with open(f"{output_path}/{FILENAME}", "w", encoding="utf-8") as file:
         # Write top entries that don't require connection to the database
         file.writelines(top_entry_builder.create(config, EntryType.INSTANCE))
         file.writelines("\n")
@@ -94,4 +100,4 @@ def run():
             write_jsonl(file, views_json)
 
     print(f"{schemas_count + entries_count} rows written to file") 
-    gcs_uploader.upload(config, FILENAME,FOLDERNAME)
+    gcs_uploader.upload(config,output_path,FILENAME,FOLDERNAME)
