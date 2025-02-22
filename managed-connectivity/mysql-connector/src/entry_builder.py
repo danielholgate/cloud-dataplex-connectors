@@ -63,7 +63,7 @@ def build_schemas(config, df_raw_schemas):
     Returns:
         A dataframe with Dataplex-readable schemas.
     """
-    entry_type = EntryType.DB_SCHEMA
+    entry_type = EntryType.DATABASE
     entry_aspect_name = nb.create_entry_aspect_name(config, entry_type)
 
     # For schema, parent name is the name of the database
