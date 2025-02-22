@@ -16,12 +16,12 @@ def create_fqn(config: Dict[str, str], entry_type: EntryType,
     if entry_type == EntryType.INSTANCE:
         # Requires backticks to escape column
         return f"{SOURCE_TYPE}:`{config['host']}`"
-    #if entry_type == EntryType.DATABASE:
-    #    instance = create_fqn(config, EntryType.INSTANCE)
-    #    return f"{instance}.{config['database']}"
-    if entry_type == EntryType.DB_SCHEMA:
+    if entry_type == EntryType.DATABASE:
         instance = create_fqn(config, EntryType.INSTANCE)
-        return f"{instance}.{schema_name}"
+        return f"{instance}.{config['database']}"
+    #if entry_type == EntryType.DB_SCHEMA:
+    #    instance = create_fqn(config, EntryType.INSTANCE)
+    #    return f"{instance}.{schema_name}"
     if entry_type in [EntryType.TABLE, EntryType.VIEW]:
         database = create_fqn(config, EntryType.INSTANCE)
         return f"{database}.{schema_name}.{table_name}"
