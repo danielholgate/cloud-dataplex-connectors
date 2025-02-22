@@ -41,17 +41,17 @@ def create_name(config: Dict[str, str], entry_type: EntryType,
             f"entries/"
         )
         return name_prefix + config["host"].replace(":", "@")
-    #if entry_type == EntryType.DATABASE:
-    #    instance = create_name(config, EntryType.INSTANCE)
-    #    return f"{instance}/databases/{config['database']}"
-    if entry_type == EntryType.DB_SCHEMA:
-        database = create_name(config, EntryType.INSTANCE)
-        return f"{database}/database_schemas/{schema_name}"
+    if entry_type == EntryType.DATABASE:
+        instance = create_name(config, EntryType.INSTANCE)
+        return f"{instance}/databases/{config['database']}"
+    #if entry_type == EntryType.DB_SCHEMA:
+    #    database = create_name(config, EntryType.INSTANCE)
+    #    return f"{database}/database_schemas/{schema_name}"
     if entry_type == EntryType.TABLE:
-        db_schema = create_name(config, EntryType.DB_SCHEMA, schema_name)
+        db_schema = create_name(config, EntryType.DATABASE, schema_name)
         return f"{db_schema}/tables/{table_name}"
     if entry_type == EntryType.VIEW:
-        db_schema = create_name(config, EntryType.DB_SCHEMA, schema_name)
+        db_schema = create_name(config, EntryType.DATABASE, schema_name)
         return f"{db_schema}/views/{table_name}"
     return ""
 
@@ -61,10 +61,10 @@ def create_parent_name(config: Dict[str, str], entry_type: EntryType,
     """Generates a Dataplex v2 name of the parent."""
     if entry_type == EntryType.DATABASE:
         return create_name(config, EntryType.INSTANCE)
-    if entry_type == EntryType.DB_SCHEMA:
-        return create_name(config, EntryType.DATABASE)
+    #if entry_type == EntryType.DB_SCHEMA:
+    #    return create_name(config, EntryType.DATABASE)
     if entry_type == EntryType.TABLE:
-        return create_name(config, EntryType.DB_SCHEMA, parent_name)
+        return create_name(config, EntryType.DATABASE, parent_name)
     return ""
 
 
