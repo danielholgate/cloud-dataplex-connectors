@@ -16,14 +16,14 @@ def create_fqn(config: Dict[str, str], entry_type: EntryType,
     if entry_type == EntryType.INSTANCE:
         # Requires backticks to escape column
         return f"{SOURCE_TYPE}:`{config['host']}`"
-    if entry_type == EntryType.DATABASE:
-        instance = create_fqn(config, EntryType.INSTANCE)
-        return f"{instance}.{config['database']}"
+    #if entry_type == EntryType.DATABASE:
+    #    instance = create_fqn(config, EntryType.INSTANCE)
+    #    return f"{instance}.{config['database']}"
     if entry_type == EntryType.DB_SCHEMA:
-        database = create_fqn(config, EntryType.DATABASE)
-        return f"{database}.{schema_name}"
+        instance = create_fqn(config, EntryType.INSTANCE)
+        return f"{instance}.{schema_name}"
     if entry_type in [EntryType.TABLE, EntryType.VIEW]:
-        database = create_fqn(config, EntryType.DATABASE)
+        database = create_fqn(config, EntryType.INSTANCE)
         return f"{database}.{schema_name}.{table_name}"
     return ""
 
@@ -41,11 +41,11 @@ def create_name(config: Dict[str, str], entry_type: EntryType,
             f"entries/"
         )
         return name_prefix + config["host"].replace(":", "@")
-    if entry_type == EntryType.DATABASE:
-        instance = create_name(config, EntryType.INSTANCE)
-        return f"{instance}/databases/{config['database']}"
+    #if entry_type == EntryType.DATABASE:
+    #    instance = create_name(config, EntryType.INSTANCE)
+    #    return f"{instance}/databases/{config['database']}"
     if entry_type == EntryType.DB_SCHEMA:
-        database = create_name(config, EntryType.DATABASE)
+        database = create_name(config, EntryType.INSTANCE)
         return f"{database}/database_schemas/{schema_name}"
     if entry_type == EntryType.TABLE:
         db_schema = create_name(config, EntryType.DB_SCHEMA, schema_name)
