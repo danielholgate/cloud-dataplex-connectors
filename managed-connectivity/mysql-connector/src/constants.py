@@ -9,9 +9,8 @@ ALLOWED = "!"
 
 
 class EntryType(enum.Enum):
-    """Types of Mysql entries."""
+    """Types of Mysql entries. Instance, database, table/view"""
     INSTANCE: str = "projects/{project}/locations/{location}/entryTypes/mysql-instance"
     DATABASE: str = "projects/{project}/locations/{location}/entryTypes/mysql-database"
-    ##DB_SCHEMA: str = "projects/{project}/locations/{location}/entryTypes/mysql-schema"
     TABLE: str = "projects/{project}/locations/{location}/entryTypes/mysql-table"
     VIEW: str = "projects/{project}/locations/{location}/entryTypes/mysql-view"
